@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const { readFile, generatorPassword } = require('./utils');
 const validEmail = require('./middlewares/validEmail.js');
 const validPassword = require('./middlewares/validPassword');
+const validToken = require('./middlewares/validToken');
+const validTalker = require('./middlewares/validTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +20,10 @@ app.get('/', (_request, response) => {
 app.get('/talker', async (_requ, res) => {
   const response = await readFile();
   res.status(HTTP_OK_STATUS).json(response);
+});
+
+app.post('/talker', validToken, validTalker, (_req, _res) => {
+  
 });
 
 app.get('/talker/:id', async (req, res) => {
