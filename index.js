@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { readFile, generatorPassword } = require('./utils');
+const validEmail = require('./middlewares/validEmail.js');
+const validPassword = require('./middlewares/validPassword');
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,7 +31,7 @@ app.get('/talker/:id', async (req, res) => {
   res.status(200).json(filterId);
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', validEmail, validPassword, (req, res) => {
   const token = generatorPassword();
   
   res.status(200).json({ token });
