@@ -13,10 +13,20 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', async (_request, response) => {
-  const res = await readFile();
-  console.log(res);
-  response.status(HTTP_OK_STATUS).json(res);
+app.get('/talker', async (_requ, res) => {
+  const response = await readFile();
+  res.status(HTTP_OK_STATUS).json(response);
+});
+
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const response = await readFile();
+
+  const filterId = response.find((r) => r.id === Number(id));
+  
+  if (!filterId) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  
+  res.status(200).json(filterId);
 });
 
 app.listen(PORT, () => {
