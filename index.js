@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const readFile = require('./utils');
+const { readFile, generatorPassword } = require('./utils');
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,6 +27,12 @@ app.get('/talker/:id', async (req, res) => {
   if (!filterId) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   
   res.status(200).json(filterId);
+});
+
+app.post('/login', (req, res) => {
+  const token = generatorPassword();
+  
+  res.status(200).json({ token });
 });
 
 app.listen(PORT, () => {
