@@ -57,7 +57,7 @@ app.put('/talker/:id',
   array.push(obj);  
   
   const result = JSON.stringify(array);
-  writeFile(result);
+  await writeFile(result);
   res.status(200).json(obj);
 });
 
@@ -72,14 +72,14 @@ app.get('/talker/:id', async (req, res) => {
   res.status(200).json(filterId);
 });
 
-app.delete('/talker/:id', validToken, (req, res) => {
+app.delete('/talker/:id', validToken, async (req, res) => {
   const { id } = req.params;
   const array = [];
 
   array.push({ id });  
   
   const result = JSON.stringify(array);
-  writeFile(result);
+  await writeFile(result);
   
   res.status(204).send();
 });
