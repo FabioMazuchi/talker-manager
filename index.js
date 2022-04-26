@@ -21,6 +21,12 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.post('/login', validEmail, validPassword, (req, res) => {
+  const token = generatorPassword();
+  
+  res.status(200).json({ token });
+});
+
 app.get('/talker', async (_requ, res) => {
   const response = await readFile();
   res.status(HTTP_OK_STATUS).json(response);
@@ -66,10 +72,16 @@ app.get('/talker/:id', async (req, res) => {
   res.status(200).json(filterId);
 });
 
-app.post('/login', validEmail, validPassword, (req, res) => {
-  const token = generatorPassword();
+app.delete('/talker/:id', validToken, (req, res) => {
+  const { id } = req.params;
+  const array = [];
+
+  array.push({ id });  
   
-  res.status(200).json({ token });
+  const result = JSON.stringify(array);
+  writeFile(result);
+  
+  res.status(204).send();
 });
 
 app.listen(PORT, () => {
