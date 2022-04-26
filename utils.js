@@ -11,6 +11,14 @@ const readFile = async () => {
   }
 };
 
+const writeFile = async (content) => {
+  try {
+    await fs.writeFile(FILE, content);
+  } catch (err) {
+    console.error(`Erro ao escrever o arquivo: ${err.message}`);
+  }
+};
+
 // https://www.youtube.com/watch?v=Hr5pAAIXjkA&t=184s
 const generatorPassword = () => {
   let pass = '';
@@ -22,4 +30,10 @@ const generatorPassword = () => {
   return pass;
 };
 
-module.exports = { readFile, generatorPassword };
+const generateObj = (obj) => {
+  const { name, age, talk } = obj;
+  const newObj = { name, id: 5, age, talk };
+  return newObj;
+};
+
+module.exports = { readFile, generatorPassword, generateObj, writeFile };

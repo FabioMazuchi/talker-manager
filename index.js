@@ -1,10 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readFile, generatorPassword } = require('./utils');
+const { readFile, generatorPassword, generateObj, writeFile } = require('./utils');
 const validEmail = require('./middlewares/validEmail.js');
 const validPassword = require('./middlewares/validPassword');
 const validToken = require('./middlewares/validToken');
-const validTalker = require('./middlewares/validTalker');
+const validName = require('./middlewares/validName');
+const validAge = require('./middlewares/validAge');
+const validDate = require('./middlewares/validDate');
+const validRate = require('./middlewares/validRate');
+const validTalk = require('./middlewares/validTalk');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,8 +26,19 @@ app.get('/talker', async (_requ, res) => {
   res.status(HTTP_OK_STATUS).json(response);
 });
 
-app.post('/talker', validToken, validTalker, (_req, _res) => {
+app.post('/talker',
+  validToken, validName, validAge, validTalk, validRate, validDate, async (req, res) => {
+  const { body } = req;
+  const array = [];
   
+  const obj = generateObj(body);
+  array.push(obj);
+  // const file = await readFile();
+  // file.push(obj);
+  const result = JSON.stringify(array);
+  writeFile(result);
+  
+  res.status(201).json(obj);
 });
 
 app.get('/talker/:id', async (req, res) => {
