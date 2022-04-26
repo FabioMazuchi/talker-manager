@@ -31,14 +31,28 @@ app.post('/talker',
   const { body } = req;
   const array = [];
   
-  const obj = generateObj(body);
+  const obj = generateObj(body, 5);
   array.push(obj);
-  // const file = await readFile();
-  // file.push(obj);
+
   const result = JSON.stringify(array);
   writeFile(result);
   
   res.status(201).json(obj);
+});
+
+app.put('/talker/:id',
+  validToken, validName, validAge, validTalk, validRate, validDate, async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+  const array = [];
+
+  const obj = generateObj(body, Number(id));
+
+  array.push(obj);  
+  
+  const result = JSON.stringify(array);
+  writeFile(result);
+  res.status(200).json(obj);
 });
 
 app.get('/talker/:id', async (req, res) => {

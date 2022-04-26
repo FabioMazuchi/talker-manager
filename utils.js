@@ -30,9 +30,9 @@ const generatorPassword = () => {
   return pass;
 };
 
-const generateObj = (obj) => {
+const generateObj = (obj, id) => {
   const { name, age, talk } = obj;
-  const newObj = { name, id: 5, age, talk };
+  const newObj = { name, id, age, talk };
   return newObj;
 };
 
