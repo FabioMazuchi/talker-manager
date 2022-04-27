@@ -32,16 +32,28 @@ app.get('/talker', async (_requ, res) => {
   res.status(HTTP_OK_STATUS).json(response);
 });
 
+app.get('/talker/search', validToken, async (req, res) => {
+  const { q } = req.query;
+
+  const response = await readFile();
+  if (!q) return res.status(200).json(response);
+
+  const filter = response.filter(({ name }) => name.includes(q));
+
+  res.status(200).json(filter);
+});
+
 app.post('/talker',
   validToken, validName, validAge, validTalk, validRate, validDate, async (req, res) => {
   const { body } = req;
-  const array = [];
-  
-  const obj = generateObj(body, 5);
-  array.push(obj);
 
-  const result = JSON.stringify(array);
-  writeFile(result);
+  const fileContent = await readFile();
+
+  const obj = generateObj(body, 5);
+  fileContent.push(obj);
+
+  const result = JSON.stringify(fileContent);
+  await writeFile(result);
   
   res.status(201).json(obj);
 });
