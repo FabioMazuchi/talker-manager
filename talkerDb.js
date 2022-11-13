@@ -14,4 +14,9 @@ const readFile = async () => {
 
 const listAll = async () => readFile();
 
-module.exports = { listAll };
+const findById = async (id) => {
+  const talkers = await readFile();
+  return talkers.find((talker) => talker.id === id);
+};
+
+module.exports = { listAll, findById };
