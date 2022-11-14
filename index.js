@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const talkerDb = require('./talkerDb');
+const generateToken = require('./generateToken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,6 +13,8 @@ const PORT = '3000';
 app.get('/', (requ, res) => {
   res.status(HTTP_OK_STATUS).send();
 });
+
+app.post('/login', (req, res) => res.json({ token: generateToken() }));
 
 app.get('/talker', async (req, res) => {
   const result = await talkerDb.listAll();
