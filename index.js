@@ -33,6 +33,11 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 });
 
+app.delete('/talker/:id', authToken, async (req, res) => {
+  await talkerDb.deleteTalker(req.params.id);
+  return res.status(204).end();
+});
+
 app.use(authToken, validNameAge, validTalk, validRate);
 
 app.post('/talker', async (req, res) => {
@@ -42,7 +47,7 @@ app.post('/talker', async (req, res) => {
 
 app.put('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  await talkerDb.updateTalker(req.params.id, req.body);
+  await talkerDb.updateTalker(id, req.body);
   return res.json({ id: Number(id), ...req.body });
 });
 
