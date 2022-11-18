@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const talkerDb = require('./talkerDb');
 const generateToken = require('./utils/generateToken');
 const validateLogin = require('./middlewares/validateLogin');
@@ -7,23 +6,22 @@ const authToken = require('./middlewares/authToken');
 const { validNameAge, validTalk, validRate } = require('./middlewares/validateTalker');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 
-const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
-app.get('/', (requ, res) => {
+app.get('/', (req, res) => {
   res.status(HTTP_OK_STATUS).send();
+});
+
+app.post('/login', validateLogin, (req, res) => {
+  res.json({ token: generateToken() });
 });
 
 app.get('/talker', async (req, res) => {
   const result = await talkerDb.listAll();
   return res.json(result);
-});
-
-app.post('/login', validateLogin, (req, res) => {
-  res.json({ token: generateToken() });
 });
 
 app.get('/talker/search', authToken, async (req, res) => {
