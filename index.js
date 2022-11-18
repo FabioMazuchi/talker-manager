@@ -33,9 +33,17 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 });
 
-app.post('/talker', authToken, validNameAge, validTalk, validRate, async (req, res) => {
+app.use(authToken, validNameAge, validTalk, validRate);
+
+app.post('/talker', async (req, res) => {
   const newTalker = await talkerDb.addTalker(req.body);
   return res.status(201).json(newTalker);
+});
+
+app.put('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  await talkerDb.updateTalker(req.params.id, req.body);
+  return res.json({ id: Number(id), ...req.body });
 });
 
 app.listen(PORT, () => {

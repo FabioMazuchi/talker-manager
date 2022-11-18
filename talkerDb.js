@@ -35,4 +35,10 @@ const addTalker = async (body) => {
   return { id, ...body };
 };
 
-module.exports = { listAll, findById, addTalker };
+const updateTalker = async (id, body) => {
+  const talkers = await readFile();
+  talkers.splice(Number(id) - 1, 1, { id: Number(id), ...body });
+  await wrhiteFile(talkers);
+};
+
+module.exports = { listAll, findById, addTalker, updateTalker };
