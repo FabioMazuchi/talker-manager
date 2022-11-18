@@ -47,4 +47,10 @@ const deleteTalker = async (id) => {
   await wrhiteFile(talkers);
 };
 
-module.exports = { listAll, findById, addTalker, updateTalker, deleteTalker };
+const filterTalker = async (name) => {
+  console.log(typeof name);
+  const talkers = await readFile();
+  return talkers.filter((talker) => talker.name.includes(name));
+};
+
+module.exports = { listAll, findById, addTalker, updateTalker, deleteTalker, filterTalker };

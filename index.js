@@ -17,13 +17,18 @@ app.get('/', (requ, res) => {
   res.status(HTTP_OK_STATUS).send();
 });
 
+app.get('/talker', async (req, res) => {
+  const result = await talkerDb.listAll();
+  return res.json(result);
+});
+
 app.post('/login', validateLogin, (req, res) => {
   res.json({ token: generateToken() });
 });
 
-app.get('/talker', async (req, res) => {
-  const result = await talkerDb.listAll();
-  return res.json(result);
+app.get('/talker/search', authToken, async (req, res) => {
+  const filterTalkers = await talkerDb.filterTalker(req.query.q);
+  return res.json(filterTalkers);
 });
 
 app.get('/talker/:id', async (req, res) => {
@@ -33,12 +38,14 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 });
 
-app.delete('/talker/:id', authToken, async (req, res) => {
+app.use(authToken);
+
+app.delete('/talker/:id', async (req, res) => {
   await talkerDb.deleteTalker(req.params.id);
   return res.status(204).end();
 });
 
-app.use(authToken, validNameAge, validTalk, validRate);
+app.use(validNameAge, validTalk, validRate);
 
 app.post('/talker', async (req, res) => {
   const newTalker = await talkerDb.addTalker(req.body);
