@@ -48,7 +48,6 @@ const deleteTalker = async (id) => {
 };
 
 const filterTalker = async (name) => {
-  console.log(typeof name);
   const talkers = await readFile();
   return talkers.filter((talker) => talker.name.includes(name));
 };
