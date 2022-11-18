@@ -12,6 +12,14 @@ const readFile = async () => {
   }
 };
 
+const wrhiteFile = async (content) => {
+  try {
+    await fs.writeFile(path, JSON.stringify(content));
+  } catch (e) {
+    console.log(`Erro ao escrever no arquivo: ${e.message}`);
+  }
+};
+
 const listAll = async () => readFile();
 
 const findById = async (id) => {
@@ -19,4 +27,12 @@ const findById = async (id) => {
   return talkers.find((talker) => talker.id === id);
 };
 
-module.exports = { listAll, findById };
+const addTalker = async (body) => {
+  const talkers = await readFile();
+  const id = talkers.length + 1;
+  talkers.push({ id, ...body });
+  await wrhiteFile(talkers);
+  return { id, ...body };
+};
+
+module.exports = { listAll, findById, addTalker };
